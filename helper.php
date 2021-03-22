@@ -97,6 +97,7 @@ echo $query;
                    ->where ($db->quoteName('virtuemart_user_id'). '=' .$userId);
             $db->setQuery($user_group);
             $row_user_group = $db->loadRow();
+            if(!$row_user_group){$row_user_group[0]=5;}
             $q = $db->getQuery(true);
             $q
                 ->select ($db->quoteName (array('t1.virtuemart_product_id', 'product_name', 'virtuemart_category_id', 'product_availability','product_price')))
