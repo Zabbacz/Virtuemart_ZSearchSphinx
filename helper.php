@@ -52,16 +52,13 @@ class ModZSearchSphinxHelper
         $url = '';
         $user =& JFactory::getUser();
         $userId = $user->get( 'id' );
-echo $userId." user id <br />";
         $query = (string) preg_replace('/[^\p{L}\d\s]/u', ' ', $query);
         $query = trim($query);
         $query = $query.'*';
-echo $query;
         if ($input -> exists('start'))
         {
         $start  = $input->get('start', '0', 'INT');
 	    $current = $start/$offset+1;
-            echo $start;
 	}
         $db = JFactory::getDBO();
         $db = JDatabase::getInstance(self::pripojDatabazi('sphinx'));
@@ -100,17 +97,20 @@ echo $query;
             if(!$row_user_group){$row_user_group[0]=5;}
             $q = $db->getQuery(true);
             $q
-                ->select ($db->quoteName (array('t1.virtuemart_product_id', 'product_name', 'virtuemart_category_id', 'product_availability','product_price')))
+                ->select ($db->quoteName (array('t1.virtuemart_product_id', 'product_name', 'virtuemart_category_id', 'product_availability','product_price','file_url')))
                 ->from($db->quoteName('#__virtuemart_products_cs_cz','t1'))
                 ->join('INNER',$db->quoteName('#__virtuemart_product_prices','t4'). ' ON ' . $db->quoteName('t1.virtuemart_product_id') . ' = ' . $db->quoteName('t4.virtuemart_product_id'))    
                 ->join('INNER',$db->quoteName('#__virtuemart_products','t3'). ' ON ' . $db->quoteName('t1.virtuemart_product_id') . ' = ' . $db->quoteName('t3.virtuemart_product_id'))
+                ->join('INNER',$db->quoteName('#__virtuemart_product_medias','t5'). ' ON ' . $db->quoteName('t1.virtuemart_product_id') . ' = ' . $db->quoteName('t5.virtuemart_product_id'))    
+                ->join('INNER',$db->quoteName('#__virtuemart_medias','t6'). ' ON ' . $db->quoteName('t5.virtuemart_media_id') . ' = ' . $db->quoteName('t6.virtuemart_media_id'))
                 ->join('LEFT',$db->quoteName('#__virtuemart_product_categories','t2'). ' ON ' . $db->quoteName('t1.virtuemart_product_id') . ' = ' . $db->quoteName('t2.virtuemart_product_id'))
                 ->where($db->quoteName('t1.virtuemart_product_id'). ' IN '.'  (' . implode(",", $ids) . ')')
                 ->where($db->quoteName('t4.virtuemart_shoppergroup_id'). ' = '.$row_user_group[0]);
             $db->setQuery ($q);
             $q = $db->loadAssocList();
+   //var_dump($q);            
             foreach ($q as $row) {
-                $tmpdocs[$row['virtuemart_product_id']] = array('product_name' => $row['product_name'], 'virtuemart_product_id' => $row['virtuemart_product_id'], 'virtuemart_category_id' => $row['virtuemart_category_id'], 'product_availability' => $row['product_availability'],$row =>['total'],'product_price' => $row['product_price'],$row => ['total_found']);
+                $tmpdocs[$row['virtuemart_product_id']] = array('product_name' => $row['product_name'], 'virtuemart_product_id' => $row['virtuemart_product_id'], 'virtuemart_category_id' => $row['virtuemart_category_id'], 'product_availability' => $row['product_availability'],$row =>['total'],'product_price' => $row['product_price'],'file_url' => $row['file_url'],$row => ['total_found']);
 		}
             foreach ($ids as $id) {
                 $docs[] = $tmpdocs[$id];

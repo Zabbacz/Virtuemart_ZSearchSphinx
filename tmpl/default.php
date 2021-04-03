@@ -31,7 +31,17 @@ defined('_JEXEC') or die('Restricted access');
                 <?php if (!$product_id) continue;?>
             <form method="post" class="product js-recalculate" action="#">
             <div class="addtocart-bar">
-            <?php			
+                
+                <div class="main-image">
+                    <div class="product-details-imege-handler">
+                <?php $image_link = JUri::root() .'images/stories/virtuemart/product/resized/'.$doc['file_url'];?>
+            <img src=<?=$image_link;?>>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                
+      <?php			
             $product_link = JRoute::_('index.php?option=com_virtuemart&view=productdetails&virtuemart_product_id='.$doc['virtuemart_product_id'].'&virtuemart_category_id='.$doc['virtuemart_category_id']);
             ?>    
             <a href="<?=$product_link; ?>"><?= $doc['product_name']?></a>
@@ -39,6 +49,7 @@ defined('_JEXEC') or die('Restricted access');
             <?='<strong>dostupnost : '.$doc['product_availability'].'</strong>' ?>
             <br />
             <?= "<i>Vaše cena : ".substr($doc['product_price'],0,-4)." Kc bez DPH </i>"?>    
+
             <span class="quantity-box">
                 <input class='input-mini' type='number' name="quantity[]" value='1'>
             </span>
@@ -49,6 +60,9 @@ defined('_JEXEC') or die('Restricted access');
             <input type="submit" name="addtocart" class="addtocart-button" value="Do košíku" title="Do košíku">
             <input type="hidden" name="virtuemart_product_id[]" value=<?=$product_id?>>
             <noscript><input type="hidden" name="task" value="add"/></noscript> 
+
+            <br/>
+            <hr>
             </div>	
             <input type="hidden" name="option" value="com_virtuemart">
             <input type="hidden" name="view" value="cart">
@@ -59,6 +73,9 @@ defined('_JEXEC') or die('Restricted access');
             </form>
                     </div>
             </div>
+
+                
+                
 	<?php $i++; endforeach; ?>
         <div class="span9"><?php require dirname(__FILE__) . '/paginator.php';?></div>
     	<?php elseif (isset($_GET['query']) && $_GET['query'] != ''): ?>
