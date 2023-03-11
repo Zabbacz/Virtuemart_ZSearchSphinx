@@ -43,7 +43,8 @@ defined('_JEXEC') or die('Restricted access');
 
                 
       <?php			
-            $product_link = JRoute::_('index.php?option=com_virtuemart&view=productdetails&virtuemart_product_id='.$doc['virtuemart_product_id'].'&virtuemart_category_id='.$doc['virtuemart_category_id']);
+//            $product_link = JRoute::_('index.php?option=com_virtuemart&view=productdetails&virtuemart_product_id='.$doc['virtuemart_product_id'].'&virtuemart_category_id='.$doc['virtuemart_category_id']);
+              $product_link = (JURI::root().'?option=com_virtuemart&view=productdetails&virtuemart_product_id='.($doc['virtuemart_product_id']).'&virtuemart_category_id='.($doc['virtuemart_category_id']));
             ?>    
             <a href="<?=$product_link; ?>"><?= $doc['product_name']?></a>
             <br />
